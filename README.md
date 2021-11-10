@@ -18,7 +18,7 @@ Please note the following ports being leveragedand update them as needed in the 
   Kube-StateMetrics: 
     ports: 8080, 8081
   
-##Instructions 
+## Instructions 
 To deploy the K8 objects in the "Manifest" files into your cluster, please follow the below easy 3-4 steps: 
 
 (Optional Step) Fork this repository to your Github repositories. (This will allow you to save any file updates to your repo). 
