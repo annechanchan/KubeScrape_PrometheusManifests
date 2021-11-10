@@ -26,5 +26,6 @@ To deploy the K8 objects in the "Manifest" files into your cluster, please follo
 2. CD (Change directory) into the "KubeScrape_PrometheusManifest" folder
 3. Run the following command in your terminal: 
   ````kubectl apply -f Manifests````
+  
 *Note: These K8 objects will persist in your cluster. If you would like to delete, navigate to this root folder and run: 
   ````kubectl delete -f Manifests````
