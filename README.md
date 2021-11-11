@@ -5,7 +5,7 @@ Please visit the below github repository to download the KubeScrape application 
   Link: https://github.com/oslabs-beta/KubeScrape
 
 ## KubeScrape_PrometheusManifests Overview
-The repository contains manifest files to help KubeScrape users deploy Prometheus, Node Exporter, and Kube-State-Metrics if Prometheus is not already deployed in their Kubernetes cluster. These configurations will help scrape metrics from the Kubernetes API. 
+The repository contains manifest files to help KubeScrape users deploy Prometheus (including alert rules), Node Exporter, and Kube-State-Metrics if Prometheus is not already deployed in your Kubernetes cluster. These configurations will help scrape metrics from the Kubernetes API. 
 
 Please note the following ports being leveragedand update them as needed in the yaml files: 
   - Prometheus:
