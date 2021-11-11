@@ -33,7 +33,7 @@ To deploy the K8 objects in the "Manifest" files into your cluster, please follo
 4. Run the following command in your terminal to create the "monitoring" namespace:
   ```kubectl create namespace monitoring```
 5. Run the following command to create K8 objects for Prometheus, node exporter, and kube-state-metrics from the manifests folder:
-  ````kubectl apply -f manifests````
+  ```kubectl apply -f manifests```
   
 *Note: These K8 objects will persist in your cluster. If you would like to delete, navigate to this root folder and run: 
-  ````kubectl delete -f manifests````
+  ``kubectl delete -f manifests``
