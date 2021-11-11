@@ -1,13 +1,14 @@
 # KubeScrape 
-KubeScrape is XXX. High level overview about the project. 
+KubeScrape is XXX. <High level overview about the project.>
 
-Please visit the below github repository to download the KubeScrape application and try our K8 visualizer for yourself! Our team would love to hear your feedback and suggestions for enhancements. 
+Please visit the below github release repository to download the KubeScrape application with one-click and try our K8 visualizer for yourself! Our team would love to hear your feedback and suggestions for enhancements. 
+
 [KubeScrape](https://github.com/oslabs-beta/KubeScrape) | [![GitHub stars](https://img.shields.io/github/stars/oslabs-beta/KubeScrape?style=social&label=Star&)](https://github.com/oslabs-beta/KubeScrape/)
 
 ## KubeScrape_PrometheusManifests Overview
-The repository contains manifest files to help KubeScrape users deploy Prometheus (including alert rules), Node Exporter, and Kube-State-Metrics if Prometheus is not already deployed in your Kubernetes cluster. These configurations will help scrape metrics from the Kubernetes API. 
+The repository contains manifest files to help KubeScrape users deploy Prometheus (including alert rules), node exporter, and kube-state-metrics into their Kubernetes cluster. Kubescrape will leverage these instances to scrape metrics from the Kubernetes API and display them in the application. 
 
-Please note the following ports being leveragedand update them as needed in the yaml files: 
+Please note the following ports being leveraged and update them as needed in the yaml files: 
   - Prometheus:
     - port: 9090 
     - targetPort: 9090
