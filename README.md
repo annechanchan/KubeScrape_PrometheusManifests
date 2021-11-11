@@ -8,15 +8,15 @@ Please visit the below github repository to download the KubeScrape application 
 The repository contains manifest files to help KubeScrape users deploy Prometheus, Node Exporter, and Kube-State-Metrics if Prometheus is not already deployed in their Kubernetes cluster. These configurations will help scrape metrics from the Kubernetes API. 
 
 Please note the following ports being leveragedand update them as needed in the yaml files: 
-  Prometheus:
-    port: 9090 
-    targetPort: 9090
-    nodePort: 30000
-  Node Exporter: 
-    port: 9100 
-    targetPort: 9100
-  Kube-StateMetrics: 
-    ports: 8080, 8081
+  - Prometheus:
+    - port: 9090 
+    - targetPort: 9090
+    - nodePort: 30000
+  - Node Exporter: 
+    - port: 9100 
+    - targetPort: 9100
+  - Kube-StateMetrics: 
+    - ports: 8080, 8081
   
 ## Instructions 
 To deploy the K8 objects in the "Manifest" files into your cluster, please follow the below easy 3-4 steps: 
@@ -24,8 +24,10 @@ To deploy the K8 objects in the "Manifest" files into your cluster, please follo
 (Optional Step) Fork this repository to your Github repositories. (This will allow you to save any file updates to your repo). 
 1. Clone the repo 
 2. CD (Change directory) into the "KubeScrape_PrometheusManifest" folder
-3. Run the following command in your terminal: 
-  ````kubectl apply -f Manifests````
+3. Run the following command in your terminal to create the "monitoring" namespace:
+  ````kubectl create namespace monitoring````
+4. Run the following command to create K8 objects for Prometheus, node exporter, and kube-state-metrics from the manifests folder:
+  ````kubectl apply -f manifests````
   
 *Note: These K8 objects will persist in your cluster. If you would like to delete, navigate to this root folder and run: 
-  ````kubectl delete -f Manifests````
+  ````kubectl delete -f manifests````
