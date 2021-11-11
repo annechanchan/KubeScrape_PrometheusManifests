@@ -11,7 +11,7 @@ Please visit the below github release repository to download the KubeScrape appl
 [KubeScrape](https://github.com/oslabs-beta/KubeScrape) | [![GitHub stars](https://img.shields.io/github/stars/oslabs-beta/KubeScrape?style=social&label=Star&)](https://github.com/oslabs-beta/KubeScrape/)
 
 ## KubeScrape_PrometheusManifests Overview
-The repository contains manifest files to help KubeScrape users deploy an instance of Prometheus (including alert rules), node exporter, and kube-state-metrics into their Kubernetes cluster. Kubescrape will leverage these instances to gather metrics from the Kubernetes API and display them in the application. 
+This repository contains manifest files to help KubeScrape users deploy an instance of Prometheus (including alert rules), node exporter, and kube-state-metrics into their Kubernetes cluster. Kubescrape will leverage these instances to gather metrics from the Kubernetes API and display them in the application. 
 
 Please note the following ports being leveraged and update them as needed in the yaml files: 
   - Prometheus:
