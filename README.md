@@ -1,10 +1,9 @@
 <p align="center">
   <img src="https://i.imgur.com/763iZTq.jpg"  width="300" height="240">
 </p>
-<p align="center">An open source visualizer with easy to read metrics, graphs, and diagrams for your Kubernetes Cluster</p>
 
 ## KubeScrape
-KubeScrape is XXX. <High level overview about the project.>
+KubeScrape is an open source dev tool that provides an intuitive way to view the health, structure, and live-metrics of your Kubernetes cluster.
 
 Please visit the below github release repository to download the KubeScrape application with one-click and try our K8 visualizer for yourself! Our team would love to hear your feedback and suggestions for enhancements. Please leave a star to help support our work!
 
