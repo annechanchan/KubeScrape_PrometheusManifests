@@ -27,7 +27,8 @@ Please note the following ports being leveraged and update them as needed in the
 ## Instructions 
 To deploy the K8 objects in the "Manifest" files into your cluster, please follow the below 4 steps: 
 
-(Optional Step) Fork this repository to your Github repositories. (This will allow you to save any file updates to your repo). 
+(Optional Step) Fork this repository to your Github repositories
+
 1. Clone the repo 
 2. CD (Change directory) into the "KubeScrape_PrometheusManifest" folder
 3. Run the following command in your terminal to create the "monitoring" namespace:
