@@ -27,13 +27,12 @@ Please note the following ports being leveraged and update them as needed in the
 ## Instructions 
 To deploy the K8 objects in the "Manifest" files into your cluster, please follow the below 4 steps: 
 
-(Optional Step) Fork this repository to your Github repositories
-
-1. Clone the repo 
-2. CD (Change directory) into the "KubeScrape_PrometheusManifest" folder
-3. Run the following command in your terminal to create the "monitoring" namespace:
+1. (Optional Step) Fork this repository to your Github repositories
+2. Clone the repo 
+3. CD (Change directory) into the "KubeScrape_PrometheusManifest" folder
+4. Run the following command in your terminal to create the "monitoring" namespace:
   ````kubectl create namespace monitoring````
-4. Run the following command to create K8 objects for Prometheus, node exporter, and kube-state-metrics from the manifests folder:
+5. Run the following command to create K8 objects for Prometheus, node exporter, and kube-state-metrics from the manifests folder:
   ````kubectl apply -f manifests````
   
 *Note: These K8 objects will persist in your cluster. If you would like to delete, navigate to this root folder and run: 
