@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://i.imgur.com/763iZTq.jpg"  width="320" height="240">
-</p?
+</p>
 <p align="center">An open source visualizer with easy to read metrics, graphs, and diagrams for your Kubernetes Cluster</p>
 
 #KubeScrape
