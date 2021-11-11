@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://i.imgur.com/763iZTq.jpg"></p>
+ <img src="https://i.imgur.com/763iZTq.jpg"  width="320" height="240"></p>
 <h1 align="center"><strong>KubeScrape</strong></h1>
 
 <p align="center">An open source visualizer with easy to read metrics, graphs, and diagrams for your Kubernetes Cluster</p>
