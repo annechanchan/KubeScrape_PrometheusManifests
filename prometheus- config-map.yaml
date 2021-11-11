@@ -1,0 +1,319 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-server-conf
+  labels:
+    name: prometheus-server-conf
+  namespace: monitoring
+data:
+  prometheus.rules: |- #file created for alerting rules
+    groups:
+    - name: devopscube demo alert
+      rules:
+      - alert: HighNodeMemory
+        annotations:
+          summary: Memory usage is under pressure, system may become unstable
+          description: Memory on node {{ $labels.instance }} currently at {{ humanize $value }}% is under pressure
+        expr: |
+          100 - ((node_memory_MemAvailable_bytes * 100) / node_memory_MemTotal_bytes) > 70
+        for: 2m
+        labels:
+          severity: warning
+      - alert: HostMemoryUnderMemoryPressure
+        annotations:
+          summary: Host memory under memory pressure (instance {{ $labels.instance }})
+          description: "The node is under heavy memory pressure. High rate of major page faults. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: rate(node_vmstat_pgmajfault[1m]) > 1000
+        for: 2m
+        labels:
+          severity: warning
+      - alert: HostUnusualNetworkThroughputIn
+        annotations:
+          summary: Host unusual network throughput in (instance {{ $labels.instance }})
+          description: "Host network interfaces are probably receiving too much data (> 100 MB/s). \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+      - alert: HostUnusualNetworkThroughputOut
+        annotations:
+          summary: Host unusual network throughput out (instance {{ $labels.instance }})
+          description: "Host network interfaces are probably sending too much data (> 100 MB/s). \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: sum by (instance) (rate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+      - alert: HostUnusualDiskReadRate
+        annotations:
+          summary: Host unusual disk read rate (instance {{ $labels.instance }})
+          description: "Disk is probably reading too much data (> 50 MB/s). \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: |
+          sum by (instance) (rate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 50
+        for: 5m
+        labels:
+          severity: warning
+      - alert: HostUnusualDiskWriteRate
+        annotations:
+          summary: Host unusual disk write rate (instance {{ $labels.instance }})
+          description: "Disk is probably writing too much data (> 50 MB/s). \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: sum by (instance) (rate(node_disk_written_bytes_total[2m])) / 1024 / 1024 > 50
+        for: 2m
+        labels:
+          severity: warning
+      - alert: HostHighCpuLoad
+        annotations:
+          summary: Host high CPU load (instance {{ $labels.instance }})
+          description: "CPU load is > 80%. \n  Value is {{ humanize $value }}%. \n  Labels is {{ $labels }}"
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
+        for: 0m
+        labels:
+          severity: warning
+      - alert: HostNetworkReceiveErrors
+        annotations:
+          summary: Host Network Receive Errors (instance {{ $labels.instance }})
+          description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last two minutes.\n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+      - alert: HostNetworkTransmitErrors
+        annotations:
+          summary: Host Network Transmit Errors (instance {{ $labels.instance }})
+          description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last two minutes. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"         
+        expr: rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+      - alert: ContainerMemoryUsage
+        annotations:
+          summary: Container Memory usage (instance {{ $labels.instance }})
+          description: "Container Memory usage is above 80%. \n  Value is {{ humanize $value }}%. \n  Labels is {{ $labels }}"          
+        expr: (sum(container_memory_working_set_bytes) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 80
+        for: 2m
+        labels:
+          severity: warning
+      - alert: ContainerVolumeUsage
+        annotations:
+          summary: Container Volume usage (instance {{ $labels.instance }})
+          description: "Container Volume usage is above 80%. \n  Value is {{ humanize $value }}. \n  Labels is {{ $labels }}"    
+        expr: (1 - (sum(container_fs_inodes_free) BY (instance) / sum(container_fs_inodes_total) BY (instance))) * 100 > 80
+        for: 2m
+        labels:
+          severity: warning
+      - alert: PrometheusTargetMissing
+        annotations:
+          summary: Prometheus target missing (instance {{ $labels.instance }})
+          description: "The following Prometheus target has disappeared. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: up == 0
+        for: 0m
+        labels:
+          severity: critical
+      - alert: ContainerVolumeIOUsage
+        annotations:
+          summary: Container Volume IO usage (instance {{ $labels.instance }})
+          description: "Container Volume IO usage is above 80%. \n  Value is {{ $value }}%. \n  Labels is {{ $labels }}"
+        expr: (sum(container_fs_io_current) BY (instance, name) * 100) > 80
+        for: 2m
+        labels:
+          severity: warning
+      - alert: PrometheusAllTargetsMissing
+        annotations:
+          summary: All Prometheus targets are missing (instance {{ $labels.instance }})
+          description: "A Prometheus job does not have living target(s) anymore. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: count by (job) (up) == 0
+        for: 0m
+        labels:
+          severity: critical
+      - alert: PrometheusRuleEvaluationFailures
+        annotations:
+          summary: Prometheus rule evaluation failures (instance {{ $labels.instance }})
+          description: "Prometheus encountered {{ $value }} rule evaluation failures, leading to potentially ignored alerts. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: increase(prometheus_rule_evaluation_failures_total[3m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+      - alert: PrometheusTargetScrapingSlow
+        annotations:
+          summary: Prometheus target scraping slow (instance {{ $labels.instance }})
+          description: "Prometheus is scraping exporters slowly. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: prometheus_target_interval_length_seconds{quantile="0.9"} > 60
+        for: 5m
+        labels:
+          severity: warning
+      - alert: KubeStateMetricsListErrors
+        annotations:
+          summary: kube-state-metrics is experiencing errors in list operations
+          description: kube-state-metrics is experiencing errors at an elevated rate in list operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all
+        expr: |
+          (sum(rate(kube_state_metrics_list_total{job="kube-state-metrics",result="error"}[5m])) / sum(rate(kube_state_metrics_list_total{job="kube-state-metrics"}[5m]))) > 0.01
+        for: 15m
+        labels:
+          severity: critical
+      - alert: KubeStateMetricsWatchErrors
+        annotations:
+          summary: kube-state-metrics is experiencing errors in watch operations.
+          description: kube-state-metrics is experiencing errors at an elevated rate in watch operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all
+        expr: |
+          (sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics",result="error"}[5m]))
+            /
+          sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics"}[5m])))
+          > 0.01
+        for: 15ms
+        labels:
+          severity: critical
+      - alert: KubernetesPodCrashLooping
+        annotations:
+          summary: Kubernetes pod crash looping (instance {{ $labels.instance }})
+          description: "Pod {{ $labels.pod }} is crash looping. \n  Value is {{ $value }}. \n  Labels is {{ $labels }}"
+        expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+        for: 2m
+        labels:
+          severity: warning
+
+  prometheus.yml:
+    |- #main prometheus config that holds all the scrape configs, service discovery details, storage locations, etc)
+    global: #global scrape rule
+      scrape_interval: 10s
+      evaluation_interval: 10s
+    rule_files: 
+      - /etc/prometheus/prometheus.rules
+    alerting:
+      alertmanagers:
+      - scheme: http
+        static_configs:
+        - targets:
+          - "alertmanager.monitoring.svc:9093"
+
+    scrape_configs:
+      - job_name: 'posts'
+        static_configs:
+          - targets: ["host.docker.internal:8080"]
+
+      - job_name: 'node-exporter'
+        static_configs:
+          - targets: ['localhost:9100']
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_endpoints_name]
+          regex: 'node-exporter'
+          action: keep
+
+      - job_name: 'kubernetes-apiservers' #gets metrics from API servers
+
+        kubernetes_sd_configs:
+        - role: endpoints
+        scheme: https
+
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+          action: keep
+          regex: default;kubernetes;https
+
+      - job_name: 'kubernetes-nodes' #collects metrics from K8 nodes
+
+        scheme: https
+
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+        kubernetes_sd_configs:
+        - role: node
+
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - target_label: __address__
+          replacement: kubernetes.default.svc:443
+        - source_labels: [__meta_kubernetes_node_name]
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/${1}/proxy/metrics     
+      
+      - job_name: 'kubernetes-pods' #gets pod metrics 
+
+        kubernetes_sd_configs:
+        - role: pod
+
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: replace
+          target_label: __metrics_path__
+          regex: (.+)
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+          target_label: __address__
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: kubernetes_pod_name
+      
+      - job_name: 'kube-state-metrics'
+        static_configs:
+          - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8080']
+
+      - job_name: 'kubernetes-cadvisor' #provides users with an understanding of the resource usage and performance characteristics of running containers
+
+        scheme: https
+
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+        kubernetes_sd_configs:
+        - role: node
+
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - target_label: __address__
+          replacement: kubernetes.default.svc:443
+        - source_labels: [__meta_kubernetes_node_name]
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+      
+      - job_name: 'kubernetes-service-endpoints' #gets metrics for services
+
+        kubernetes_sd_configs:
+        - role: endpoints
+
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+          action: replace
+          target_label: __scheme__
+          regex: (https?)
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+          action: replace
+          target_label: __metrics_path__
+          regex: (.+)
+        - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+          action: replace
+          target_label: __address__
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+        - action: labelmap
+          regex: __meta_kubernetes_service_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          action: replace
+          target_label: kubernetes_name
