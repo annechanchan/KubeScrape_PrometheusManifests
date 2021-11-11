@@ -6,7 +6,7 @@
 ## KubeScrape
 KubeScrape is XXX. <High level overview about the project.>
 
-Please visit the below github release repository to download the KubeScrape application with one-click and try our K8 visualizer for yourself! Our team would love to hear your feedback and suggestions for enhancements. 
+Please visit the below github release repository to download the KubeScrape application with one-click and try our K8 visualizer for yourself! Our team would love to hear your feedback and suggestions for enhancements. Please leave a star to help support our work!
 
 [KubeScrape](https://github.com/oslabs-beta/KubeScrape) | [![GitHub stars](https://img.shields.io/github/stars/oslabs-beta/KubeScrape?style=social&label=Star&)](https://github.com/oslabs-beta/KubeScrape/)
 
