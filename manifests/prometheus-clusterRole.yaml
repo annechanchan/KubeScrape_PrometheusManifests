@@ -10,7 +10,7 @@ rules:
       - services
       - endpoints
       - pods
-    verbs: ['get', 'list', 'watch'] #permissions
+    verbs: ['get', 'list', 'watch'] #permissions 
   - apiGroups:
       - extensions
     resources:
@@ -27,7 +27,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: prometheus
-subjects:
+subjects: 
   - kind: ServiceAccount
     name: default
     namespace: monitoring
